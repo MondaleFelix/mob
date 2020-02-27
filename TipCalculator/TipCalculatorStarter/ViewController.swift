@@ -9,6 +9,16 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
+    // MARK: - Properties
+
+    // 1
+    var isDefaultStatusBar = true
+
+    // 2
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return isDefaultStatusBar ? .default : .lightContent
+    }
 
     // MARK: - View Lifecycle
     
@@ -22,11 +32,14 @@ class ViewController: UIViewController {
     @IBOutlet weak var headerView: UIView!
     @IBOutlet weak var themeSwitch: UISwitch!
     
-    @IBOutlet weak var tipPercentSegmentedControl: UISegmentedControl!
+    @IBOutlet weak var tipPercentSegmentedContol: UISegmentedControl!
     @IBOutlet weak var billAmountTextField: BillAmountTextField!
     @IBOutlet weak var inputCardView: UIView!
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        setupViews()
+        setTheme(isDark: false)
 
         billAmountTextField.calculateButtonAction = {
             self.calculate()
@@ -49,7 +62,7 @@ class ViewController: UIViewController {
         let roundedBillAmount = (100 * billAmount).rounded() / 100
 
         let tipPercent: Double
-        switch tipPercentSegmentedControl.selectedSegmentIndex {
+        switch tipPercentSegmentedContol.selectedSegmentIndex {
         case 0:
             tipPercent = 0.15
         case 1:
@@ -84,18 +97,58 @@ class ViewController: UIViewController {
     }
     
     @IBAction func themeToggled(_ sender: UISwitch) {
-        if sender.isOn {
-            print("switch toggled on")
-        } else {
-            print("switch toggled off")
-        }
+        setTheme(isDark: sender.isOn)
     }
     
     func clear() {
         billAmountTextField.text = nil
-        tipPercentSegmentedControl.selectedSegmentIndex = 0
+        tipPercentSegmentedContol.selectedSegmentIndex = 0
         tipAmountLabel.text = "$0.00"
         totalAmountLabel.text = "$0.00"
+    }
+    
+    
+    func setupViews() {
+
+        // ...
+
+        outputCardView.layer.cornerRadius = 8
+        outputCardView.layer.masksToBounds = true
+
+        // set output card border
+        outputCardView.layer.borderWidth = 1
+        outputCardView.layer.borderColor = UIColor.tcHotPink.cgColor
+
+        resetButton.layer.cornerRadius = 8
+        resetButton.layer.masksToBounds = true
+    }
+    
+    func setTheme(isDark: Bool) {
+        let theme = isDark ? ColorTheme.dark : ColorTheme.light
+
+        view.backgroundColor = theme.viewControllerBackgroundColor
+
+        headerView.backgroundColor = theme.primaryColor
+        titleLabel.textColor = theme.primaryTextColor
+
+        inputCardView.backgroundColor = theme.secondaryColor
+
+        billAmountTextField.tintColor = theme.accentColor
+        tipPercentSegmentedContol.tintColor = theme.accentColor
+
+        outputCardView.backgroundColor = theme.primaryColor
+        outputCardView.layer.borderColor = theme.accentColor.cgColor
+
+        tipAmountTitleLabel.textColor = theme.primaryTextColor
+        totalAmountTitleLabel.textColor = theme.primaryTextColor
+
+        tipAmountLabel.textColor = theme.outputTextColor
+        totalAmountLabel.textColor = theme.outputTextColor
+
+        resetButton.backgroundColor = theme.secondaryColor
+        
+        isDefaultStatusBar = theme.isDefaultStatusBar
+        setNeedsStatusBarAppearanceUpdate()
     }
 }
 

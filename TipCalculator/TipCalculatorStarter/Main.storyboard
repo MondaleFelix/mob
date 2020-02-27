@@ -214,7 +214,7 @@
                         <outlet property="themeSwitch" destination="rto-Nt-KNP" id="kte-Fn-RJS"/>
                         <outlet property="tipAmountLabel" destination="vxE-5f-I54" id="UBh-Ri-gwD"/>
                         <outlet property="tipAmountTitleLabel" destination="GTY-zD-nlR" id="0g2-qn-f6V"/>
-                        <outlet property="tipPercentSegmentedContol" destination="TiV-8Z-waa" id="psY-QG-y0l"/>
+                        <outlet property="tipPercentSegmentedContol" destination="TiV-8Z-waa" id="fYS-px-5sW"/>
                         <outlet property="titleLabel" destination="rgP-dd-TXa" id="Pgf-II-8YK"/>
                         <outlet property="totalAmountLabel" destination="but-jp-kba" id="KLJ-ma-9zF"/>
                         <outlet property="totalAmountTitleLabel" destination="FZe-ns-Yhu" id="tNS-nh-zet"/>
