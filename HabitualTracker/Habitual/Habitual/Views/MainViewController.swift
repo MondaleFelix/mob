@@ -1,6 +1,6 @@
 //
 //  MainViewController.swift
-//  Habitual2
+//  Habitual
 //
 //  Created by Mondale on 2/28/20.
 //  Copyright © 2020 Mondale. All rights reserved.
