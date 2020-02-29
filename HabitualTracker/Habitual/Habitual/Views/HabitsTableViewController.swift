@@ -9,6 +9,9 @@
 import UIKit
 
 class HabitsTableViewController: UITableViewController {
+    
+    private var persistence = PersistenceLayer()
+
     var habits: [Habit] = [
         Habit(title: "Go to bed before 10pm", image: Habit.Images.book),
         Habit(title: "Drink 8 Glasses of Water", image: Habit.Images.book),
@@ -27,18 +30,22 @@ class HabitsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
-      return habits.count
-
+        return persistence.habits.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
       let cell = tableView.dequeueReusableCell( withIdentifier: HabitTableViewCell.identifier, for: indexPath) as! HabitTableViewCell
-      let habit = habits[indexPath.row]
+      let habit = persistence.habits[indexPath.row]
       cell.configure(habit)
       return cell
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        persistence.setNeedsToReloadHabits()
+        tableView.reloadData()
+    }
 
     /*
     // MARK: - Navigation
