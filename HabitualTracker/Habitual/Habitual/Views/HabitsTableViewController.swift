@@ -19,6 +19,15 @@ class HabitsTableViewController: UITableViewController {
         Habit(title: "Stand up every Hour", image: Habit.Images.book)
     ]
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+         let selectedHabit = persistence.habits[indexPath.row]
+         let habitDetailVC = HabitDetailViewController.instantiate()
+         habitDetailVC.habit = selectedHabit
+         habitDetailVC.habitIndex = indexPath.row
+         navigationController?.pushViewController(habitDetailVC, animated: true)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavBar()
