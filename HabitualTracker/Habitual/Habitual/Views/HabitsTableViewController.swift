@@ -56,6 +56,16 @@ class HabitsTableViewController: UITableViewController {
         tableView.reloadData()
     }
 
+    override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+      persistence.swapHabits(habitIndex: sourceIndexPath.row, destinationIndex: destinationIndexPath.row)
+    }
+
+    mutating func swapHabits(habitIndex: Int, destinationIndex: Int) {
+      let habitToSwap = self.habits[habitIndex]
+      self.habits.remove(at: habitIndex)
+      self.habits.insert(habitToSwap, at: destinationIndex)
+      self.saveHabits()
+    }
     /*
     // MARK: - Navigation
 
@@ -70,6 +80,8 @@ class HabitsTableViewController: UITableViewController {
 
 extension HabitsTableViewController {
 
+    navigationItem.leftBarButtonItem = self.editButtonItem
+
     func setupNavBar() {
         title = "Habitual"
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(pressAddHabit(_:)))
@@ -81,5 +93,38 @@ extension HabitsTableViewController {
       let navigationController = UINavigationController(rootViewController: addHabitVC)
       navigationController.modalPresentationStyle = .fullScreen
       present(navigationController, animated: true, completion: nil)
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+      switch editingStyle {
+        case .delete:
+          let habitToDelete = persistence.habits[indexPath.row]
+          let habitIndexToDelete = indexPath.row
+
+          let deleteAlert = UIAlertController(habitTitle: habitToDelete.title) {
+            self.persistence.delete(habitIndexToDelete)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+          }
+
+          self.present(deleteAlert, animated: true)
+        default:
+          break
+        }
+    }
+
+    
+}
+
+extension UIAlertController {
+    convenience init(habitTitle: String, comfirmHandler: @escaping () -> Void) {
+        self.init(title: "Delete Habit", message: "Are you sure you want to delete \(habitTitle)?", preferredStyle: .actionSheet)
+
+        let confirmAction = UIAlertAction(title: "Confirm", style: .destructive) { _ in
+            comfirmHandler()
+        }
+        self.addAction(confirmAction)
+
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        self.addAction(cancelAction)
     }
 }
