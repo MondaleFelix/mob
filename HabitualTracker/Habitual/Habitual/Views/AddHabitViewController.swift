@@ -35,8 +35,11 @@ class AddHabitViewController: UIViewController {
     }
 
     @IBAction func pickPhotoButtonPressed(_ sender: UIButton) {
+            guard let selectedIndexPath = selectedIndexPath else {return}
+            let confirmHabitVC = ConfirmViewController.instantiate()
+            confirmHabitVC.habitImage = habitImages[selectedIndexPath.row]
+            navigationController?.pushViewController(confirmHabitVC, animated: true)
     }
-    
     func setupNavBar() {
         title = "Select Image"
 
@@ -60,12 +63,13 @@ extension AddHabitViewController: UICollectionViewDataSource, UICollectionViewDe
 
     }
 
-func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell { let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HabitImageCollectionViewCell.identifier, for: indexPath) as! HabitImageCollectionViewCell
-    if indexPath == selectedIndexPath{ cell.setImage(image: habitImages[indexPath.row].image)
-    } else {
-    cell.setImage(image: habitImages[indexPath.row].image) }
+func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    let cell = collectionView.dequeueReusableCell(withReuseIdentifier:HabitImageCollectionViewCell.identifier, for: indexPath) as! HabitImageCollectionViewCell
+    if indexPath == selectedIndexPath{ cell.setImage(image: habitImages[indexPath.row].image, withSelection: true)
+        
+    } else { cell.setImage(image: habitImages[indexPath.row].image, withSelection: false)
+        }
     return cell
-    
     }
     
     
